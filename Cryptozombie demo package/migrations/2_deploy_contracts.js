@@ -4,6 +4,9 @@ var zombiefeeding = artifacts.require("./zombiefeeding.sol");
 var zombiehelper = artifacts.require("./zombiehelper.sol");
 var zombieattack = artifacts.require("./zombieattack.sol");
 var zombieownership = artifacts.require("./zombieownership.sol");
+var KittyFactory = artifacts.require("./KittyFactory.sol");
+var KittyOwnership = artifacts.require("./KittyOwnership.sol");
+
 
 module.exports = function(deployer) {
 
@@ -13,4 +16,6 @@ module.exports = function(deployer) {
     deployer.deploy(zombiehelper);
     deployer.deploy(zombieattack);
     deployer.deploy(zombieownership);
+    deployer.deploy(KittyFactory);
+    deployer.deploy(KittyOwnership);
 }
