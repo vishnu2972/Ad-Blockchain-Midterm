@@ -18,10 +18,11 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 //
-// const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
+const fs = require('fs');
+const mnemonic = fs.readFileSync(".secret").toString().trim();
+const api = fs.readFileSync(".skey").toString().trim();
 
 module.exports = {
   /**
@@ -44,8 +45,18 @@ module.exports = {
      development: {
       host: "127.0.0.1",     // Localhost (default: none)
      port: 7545,            // Standard Ethereum port (default: none)
-     network_id: "1337",       // Any network (default: none)
+     network_id: "5777",       // Any network (default: none)
      },
+	 
+	 sepolia: {
+		provider: () => new HDWalletProvider(mnemonic, "https://sepolia.infura.io/v3/" + api),
+		network_id: 11155111, // Sepolia's network ID
+		gas: 4000000, // Adjust the gas limit as per your requirements
+		gasPrice: 10000000000, // Set the gas price to an appropriate value
+		confirmations: 2, // Set the number of confirmations needed for a transaction
+		timeoutBlocks: 200, // Set the timeout for transactions
+		skipDryRun: true // Skip the dry run option
+	 }
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -81,7 +92,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.4.25",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.4.26",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {
