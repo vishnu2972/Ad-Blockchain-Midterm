@@ -10,6 +10,8 @@
     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
   <script language="javascript" type="text/javascript" src="cryptozombies_abi.js"></script>
+  <script language="javascript" type="text/javascript" src="Kitty_abi.js"></script>
+
 </head>
 
 <body>
@@ -20,20 +22,36 @@
   <button class="createzombieButton">Create Zombie</button>
   <button class="levelupButton">Level Up</button>
 
+  <div id="Kittes"></div>
+  <div id="createKitty">
+
+    <h2>Create a New Kitty</h2>
+    <div id="kittyStatus"></div>
+    <button class="createKittyButton">Create Kitty</button>
+  </div>
+
+  <button class="showKitty">show Kitties</button>
+
   <script>
 
     var cryptoZombies;
     var userAccount;
+    var kittyZombies;
     const showZombieButton = document.querySelector('.showZombieButton');
     const createzombieButton = document.querySelector('.createzombieButton');
     const levelupButton = document.querySelector('.levelupButton');
+    const createkittyButton = document.querySelector('.createKittyButton');
+    const showKitty = document.querySelector('.showKitty');
+
 
     function startApp() {
 	
       //ZombieOwnership contratc address
-      var cryptoZombiesAddress = "0xC08d276D3022F1E9E1e99eBAa6410fE4FcbEcB8f";
+      var cryptoZombiesAddress = "0x0C8c548A6563F588f736c60A4DaDD90984c20C21";
+      var crptoKittyAddress = "0x8188193A0D040a9495bfe4c3634cbfFf2296AF52";
 
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
+      kittyZombies = new web3.eth.Contract(cryptoKittyABI, crptoKittyAddress);
 
 
  //the following code from Lesson 6, chapter 5 is obsolete
@@ -77,6 +95,20 @@
 
     }
 
+    function displayKitties(){
+      getKitty(0).then(function (kitty) {
+                  $("#kittyStatus").append(`<div class="kitty">
+                  <ul>
+                    <li>Genes: ${kitty.genes}</li>
+                    <li>Birth Time: ${kitty.birthTime}</li>
+                    <li>CoolDownTime: ${kitty.cooldownTime}</li>
+                  </ul>
+                </div>`);
+                  console.log(kitty);
+                });
+
+    }
+
     function createRandomZombie(name) {
 
 
@@ -85,7 +117,7 @@
       return cryptoZombies.methods.createRandomZombie(name)
         .send({ from: userAccount })
         .on("receipt", function (receipt) {
-          $("#txStatus").text("Successfully created " + name + "!");
+          $("#txStatus").text("Successfully Zombie created " + name + "!");
 
           getZombiesByOwner(userAccount).then(displayZombies);
         })
@@ -93,6 +125,21 @@
 
           $("#txStatus").text(error);
         });
+    }
+
+    function createKittyGen0(name) {
+      $("#kittyStatus").text("Creating new Kitty on the blockchain. This may take a while...");
+      return kittyZombies.methods.createKittyGen0(name)
+              .send({from: userAccount, value: web3.utils.toWei("0.01", "ether")})
+              .on("receipt", function(receipt) {
+                $("#kittyStatus").text("Successfully kitty created " + name + "!");
+                displayKitties()
+
+        console.log("Kitty Created: ", receipt);
+    })
+    .on("error", function(error) {
+        console.log("Error: ", error);
+    });
     }
 
     function feedOnKitty(zombieId, kittyId) {
@@ -131,6 +178,12 @@
     function getZombiesByOwner(owner) {
       return cryptoZombies.methods.getZombiesByOwner(owner).call()
     }
+
+    function getKitty(kittyid){
+      return kittyZombies.methods.getKitty(kittyid).call()
+    }
+
+
 
     window.addEventListener('load', async () => {
     // Modern dapp browsers...
@@ -189,6 +242,7 @@
     });
 
     showZombieButton.addEventListener('click', () => {
+      console.log("show zombie");
       getZombiesByOwner(userAccount)
             .then(displayZombies);
 
@@ -198,6 +252,16 @@
       getZombiesByOwner(userAccount)
             .then(levelUp);
 
+    });
+
+    createkittyButton.addEventListener('click', () => {
+      console.log("create kitty");
+      createKittyGen0(userAccount);
+
+    });
+
+    showKitty.addEventListener('click', () => {
+      displayKitties()
     });
 
 
