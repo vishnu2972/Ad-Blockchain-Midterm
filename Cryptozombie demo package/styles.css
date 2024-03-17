@@ -1,0 +1,96 @@
+:root {
+    --bg-color: #1f242d;
+    --second-bg-color: #323946;
+    --text-color: #fff;
+    --main-color: #0ef;
+}
+
+body {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.buttons button {
+    margin-right: 15px;
+}
+
+.showZombieButton {
+    margin-top: 10rem;
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    border-radius: 4rem;
+    box-shadow: 0 0 1rem var(--main-color);
+    color: var(--main-color);
+    transition: .3s ease;
+    font-size: 1rem;
+    letter-spacing: .1rem;
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+}
+
+.showZombieButton:hover {
+    background: var(--main-color);
+    color: var(--bg-color);
+}
+
+.createzombieButton {
+    margin-top: 10rem;
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    border-radius: 4rem;
+    box-shadow: 0 0 1rem var(--main-color);
+    color: var(--main-color);
+    transition: .3s ease;
+    font-size: 1rem;
+    letter-spacing: .1rem;
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+}
+
+.createzombieButton:hover {
+    background: var(--main-color);
+    color: var(--bg-color);
+}
+
+.levelupButton {
+    margin-top: 10rem;
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    border-radius: 4rem;
+    box-shadow: 0 0 1rem var(--main-color);
+    color: var(--main-color);
+    transition: .3s ease;
+    font-size: 1rem;
+    letter-spacing: .1rem;
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+}
+
+.levelupButton:hover {
+    background: var(--main-color);
+    color: var(--bg-color);
+}
+
+.back-video {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+@media (min-aspect-ratio: 16/9){
+    .back-video{
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-aspect-ratio: 16/9){
+    .back-video{
+        width: auto;
+        height: 100%;
+    }
+}
