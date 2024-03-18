@@ -41,7 +41,7 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-     development: {
+    development: {
       host: "127.0.0.1",     // Localhost (default: none)
      port: 7545,            // Standard Ethereum port (default: none)
      network_id: "5777",       // Any network (default: none)
@@ -54,7 +54,7 @@ module.exports = {
 		networkCheckTimeout: 120000,
 		timeoutBlocks: 20000,
 		disableConfirmationListener: true,
-	 }
+	 },
 	 
 	 goerli: {
 		 provider: () => new HDWalletProvider(mnemonic, "https://goerli.infura.io/v3/" + api),
@@ -63,7 +63,7 @@ module.exports = {
 		networkCheckTimeout: 120000,
 		timeoutBlocks: 20000,
 		disableConfirmationListener: true,
-	 }
+	 },
 	 
 	 mainnet: {
 		 provider: () => new HDWalletProvider(mnemonic, "https://mainnet.infura.io/v3/" + api),
@@ -72,7 +72,7 @@ module.exports = {
 		networkCheckTimeout: 120000,
 		timeoutBlocks: 20000,
 		disableConfirmationListener: true,
-	 }
+	 },
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -131,13 +131,13 @@ module.exports = {
   // $ truffle migrate --reset --compile-all
   //
   // db: {
-    // enabled: false,
-    // host: "127.0.0.1",
-    // adapter: {
-    //   name: "sqlite",
-    //   settings: {
-    //     directory: ".db"
-    //   }
-    // }
+  // enabled: false,
+  // host: "127.0.0.1",
+  // adapter: {
+  //   name: "sqlite",
+  //   settings: {
+  //     directory: ".db"
+  //   }
+  // }
   // }
 };

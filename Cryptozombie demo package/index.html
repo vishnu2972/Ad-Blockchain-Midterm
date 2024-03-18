@@ -6,50 +6,77 @@
   <meta charset="UTF-8">
   <title>CryptoZombies front-end</title>
   <link rel="stylesheet" href="styles.css">
-<link rel="icon" href="favicon.ico">
+  <link rel="icon" href="favicon.ico">
   <script language="javascript" type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
+  <script language="javascript" type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
   <script language="javascript" type="text/javascript" src="cryptozombies_abi.js"></script>
+  <script language="javascript" type="text/javascript" src="Kitty_abi.js"></script>
+
 </head>
+
+<style>
+  img {
+    border: 8px;
+    border-style: inset;
+  }
+</style>
 
 <body>
   <div id="txStatus"></div>
   <div id="zombies"></div>
   <div class="buttons">
-  <button class="showZombieButton">Show Zombies</button>
-  <button class="createzombieButton">Create Zombie</button>
-  <button class="levelupButton">Level Up</button>
+    <button class="showZombieButton">Show Zombies</button>
+    <button class="createzombieButton">Create Zombie</button>
+    <button class="levelupButton">Level Up</button>
   </div>
   <video autoplay loop muted plays-inline class="back-video">
     <source src="zombie_created.mp4" type="video/mp4">
   </video>
+
+  <div id="Kittes"></div>
+  <div id="createKitty">
+
+    <h2>Create a New Kitty</h2>
+    <div id="kittyStatus"></div>
+    <button class="createKittyButton">Create Kitty</button>
+  </div>
+
+  <button class="showKitty">show Kitties</button>
+
   <script>
 
     var cryptoZombies;
     var userAccount;
+    var kittyZombies;
     const showZombieButton = document.querySelector('.showZombieButton');
     const createzombieButton = document.querySelector('.createzombieButton');
     const levelupButton = document.querySelector('.levelupButton');
+    const createkittyButton = document.querySelector('.createKittyButton');
+    const showKitty = document.querySelector('.showKitty');
+
 
     function startApp() {
-	
+
       //ZombieOwnership contratc address
-      var cryptoZombiesAddress = "0xC08d276D3022F1E9E1e99eBAa6410fE4FcbEcB8f";
+      var cryptoZombiesAddress = "0xE4dCd9197EF85d09d2aD0101dbd7f89EaC5Cc2c3";
+      var crptoKittyAddress = "0x8188193A0D040a9495bfe4c3634cbfFf2296AF52";
 
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
+      kittyZombies = new web3.eth.Contract(cryptoKittyABI, crptoKittyAddress);
 
 
- //the following code from Lesson 6, chapter 5 is obsolete
- //     var accountInterval = setInterval(function () {
+      //the following code from Lesson 6, chapter 5 is obsolete
+      //     var accountInterval = setInterval(function () {
 
-  //      if (web3.eth.accounts[0] !== userAccount) {
-          //userAccount = web3.eth.accounts[0];
+      //      if (web3.eth.accounts[0] !== userAccount) {
+      //userAccount = web3.eth.accounts[0];
 
-     //     getZombiesByOwner(userAccount)
+      //     getZombiesByOwner(userAccount)
       //      .then(displayZombies);
       //  }
-     // }, 100);
+      // }, 100);
 
       cryptoZombies.events.Transfer({ filter: { _to: userAccount } })
         .on("data", function (event) {
@@ -65,7 +92,31 @@
         getZombieDetails(id)
           .then(function (zombie) {
 
-
+            var testDna = zombie.dna;
+            var img = document.createElement("img");
+            var red = testDna.toString().substr(0, 4);
+            var blue = testDna.toString().substr(4, 4);
+            var green = testDna.toString().substr(8, 4);
+            var zomType = testDna.toString().substr(12, 3);
+            if (zomType % 3 == 1) {
+              img.src = "./images/zombie.png";
+              img.height = 350;
+              img.width = 200;
+            }
+            else if (zomType % 3 == 2) {
+              img.src = "./images/minecraftZombie.png"
+              img.height = 350;
+              img.width = 200;
+            }
+            else {
+              img.src = "./images/zombieCat.png"
+              img.height = 350;
+              img.width = 300;
+            }
+            img.style.backgroundColor = 'rgba(' + parseInt(red) % 255 + ', ' + parseInt(green) % 255 + ', ' + parseInt(blue) % 255 + ')'
+            img.style.webkitFilter = "hue-rotate(" + parseInt(testDna.toString().substring(0, 12)) % 360 + "deg)"
+            var src = document.getElementById("zombies");
+            src.append(img)
             $("#zombies").append(`<div class="zombie">
               <ul>
                 <li>Name: ${zombie.name}</li>
@@ -81,6 +132,20 @@
 
     }
 
+    function displayKitties(){
+      getKitty(0).then(function (kitty) {
+                  $("#kittyStatus").append(`<div class="kitty">
+                  <ul>
+                    <li>Genes: ${kitty.genes}</li>
+                    <li>Birth Time: ${kitty.birthTime}</li>
+                    <li>CoolDownTime: ${kitty.cooldownTime}</li>
+                  </ul>
+                </div>`);
+                  console.log(kitty);
+                });
+
+    }
+
     function createRandomZombie(name) {
 
 
@@ -89,7 +154,7 @@
       return cryptoZombies.methods.createRandomZombie(name)
         .send({ from: userAccount })
         .on("receipt", function (receipt) {
-          $("#txStatus").text("Successfully created " + name + "!");
+          $("#txStatus").text("Successfully Zombie created " + name + "!");
 
           getZombiesByOwner(userAccount).then(displayZombies);
         })
@@ -97,6 +162,21 @@
 
           $("#txStatus").text(error);
         });
+    }
+
+    function createKittyGen0(name) {
+      $("#kittyStatus").text("Creating new Kitty on the blockchain. This may take a while...");
+      return kittyZombies.methods.createKittyGen0(name)
+              .send({from: userAccount, value: web3.utils.toWei("0.01", "ether")})
+              .on("receipt", function(receipt) {
+                $("#kittyStatus").text("Successfully kitty created " + name + "!");
+                displayKitties()
+
+        console.log("Kitty Created: ", receipt);
+    })
+    .on("error", function(error) {
+        console.log("Error: ", error);
+    });
     }
 
     function feedOnKitty(zombieId, kittyId) {
@@ -136,72 +216,89 @@
       return cryptoZombies.methods.getZombiesByOwner(owner).call()
     }
 
+    function getKitty(kittyid){
+      return kittyZombies.methods.getKitty(kittyid).call()
+    }
+
+
+
     window.addEventListener('load', async () => {
-    // Modern dapp browsers...
-    if (window.ethereum) {
+      // Modern dapp browsers...
+      if (window.ethereum) {
         window.web3 = new Web3(ethereum);
         try {
-            // Request account access if needed
-            const accounts = await ethereum.enable();
-            // Acccounts now exposed
-            userAccount = accounts[0];
-            startApp()
+          // Request account access if needed
+          const accounts = await ethereum.enable();
+          // Acccounts now exposed
+          userAccount = accounts[0];
+          startApp()
         } catch (error) {
-            // User denied account access...
+          // User denied account access...
         }
-    }
-    // Legacy dapp browsers...
-    else if (window.web3) {
+      }
+      // Legacy dapp browsers...
+      else if (window.web3) {
         window.web3 = new Web3(web3.currentProvider);
         // Acccounts always exposed
         userAccount = web3.eth.accounts[0];
         startApp()
-    }
-    // Non-dapp browsers...
-    else {
+      }
+      // Non-dapp browsers...
+      else {
         console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
-    }
-   });
- 
-   //the following code from Lesson 6, chapter 2 is obsolete
-   //metamask no longer inject web3 since early 2021
-   //window.addEventListener('load', function () {
+      }
+    });
 
-  //    if (typeof web3 !== 'undefined') {
-   //     web3js = new Web3(web3.currentProvider);
-   //   } else {
+    //the following code from Lesson 6, chapter 2 is obsolete
+    //metamask no longer inject web3 since early 2021
+    //window.addEventListener('load', function () {
+
+    //    if (typeof web3 !== 'undefined') {
+    //     web3js = new Web3(web3.currentProvider);
+    //   } else {
 
     //  }
 
 
     //  startApp()
 
-  //  }) 
+    //  }) 
 
-   ethereum.on('accountsChanged', (accounts) => {
-       window.location.reload();
-   });
+    ethereum.on('accountsChanged', (accounts) => {
+      window.location.reload();
+    });
 
-   ethereum.on('chainChanged', (chainId) => {
-       window.location.reload(); 
-   });  
+    ethereum.on('chainChanged', (chainId) => {
+      window.location.reload();
+    });
 
- 
+
     createzombieButton.addEventListener('click', () => {
       createRandomZombie(userAccount);
 
     });
 
     showZombieButton.addEventListener('click', () => {
+      console.log("show zombie");
       getZombiesByOwner(userAccount)
-            .then(displayZombies);
+        .then(displayZombies);
 
     });
 
     levelupButton.addEventListener('click', () => {
       getZombiesByOwner(userAccount)
-            .then(levelUp);
+        .then(levelUp);
 
+    });
+
+    createkittyButton.addEventListener('click', () => {
+      console.log("create kitty");
+      createKittyGen0(userAccount);
+
+    });
+
+    showKitty.addEventListener('click', () => {
+      displayKitties()
     });
 
 

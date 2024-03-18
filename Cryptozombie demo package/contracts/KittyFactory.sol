@@ -53,7 +53,7 @@ contract KittyFactory is Ownable {
         return rand % dnaModulus;
     }
 
-    function createKittyGen0(string _name) public {
+    function createKittyGen0(string _name) external payable  {
         require(ownerKittyCount[msg.sender] == 0);
         uint genes = _generateRandomDna(_name);
         genes = genes - genes % 100;
