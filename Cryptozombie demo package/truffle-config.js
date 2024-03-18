@@ -19,10 +19,9 @@
  */
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-//
 const fs = require('fs');
-const mnemonic = fs.readFileSync(".secret").toString().trim();
-const api = fs.readFileSync(".skey").toString().trim();
+const mnemonic = fs.readFileSync("mnemonic.secret").toString().trim();
+const api = fs.readFileSync("api.skey").toString().trim();
 
 module.exports = {
   /**
@@ -51,11 +50,28 @@ module.exports = {
 	 sepolia: {
 		provider: () => new HDWalletProvider(mnemonic, "https://sepolia.infura.io/v3/" + api),
 		network_id: 11155111, // Sepolia's network ID
-		gas: 4000000, // Adjust the gas limit as per your requirements
-		gasPrice: 10000000000, // Set the gas price to an appropriate value
-		confirmations: 2, // Set the number of confirmations needed for a transaction
-		timeoutBlocks: 200, // Set the timeout for transactions
-		skipDryRun: true // Skip the dry run option
+		skipDryRun: true,
+		networkCheckTimeout: 120000,
+		timeoutBlocks: 20000,
+		disableConfirmationListener: true,
+	 }
+	 
+	 goerli: {
+		 provider: () => new HDWalletProvider(mnemonic, "https://goerli.infura.io/v3/" + api),
+		network_id: 5, // Goerli network ID
+		skipDryRun: true,
+		networkCheckTimeout: 120000,
+		timeoutBlocks: 20000,
+		disableConfirmationListener: true,
+	 }
+	 
+	 mainnet: {
+		 provider: () => new HDWalletProvider(mnemonic, "https://mainnet.infura.io/v3/" + api),
+		network_id: 1, // ETH mainnet id
+		skipDryRun: true,
+		networkCheckTimeout: 120000,
+		timeoutBlocks: 20000,
+		disableConfirmationListener: true,
 	 }
     // Another network with more advanced options...
     // advanced: {
@@ -92,7 +108,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.4.26",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.4.25",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {
