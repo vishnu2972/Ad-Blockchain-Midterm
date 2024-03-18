@@ -7,7 +7,7 @@
 
 body {
     background: var(--bg-color);
-    color: var(--text-color);
+    color: var(--main-color);
 }
 
 .buttons button {
@@ -15,7 +15,7 @@ body {
 }
 
 .showZombieButton {
-    margin-top: 10rem;
+    margin-top: 0rem;
     display: inline-block;
     padding: 1rem 2.8rem;
     border-radius: 4rem;
@@ -35,7 +35,7 @@ body {
 }
 
 .createzombieButton {
-    margin-top: 10rem;
+    margin-top: 0rem;
     display: inline-block;
     padding: 1rem 2.8rem;
     border-radius: 4rem;
@@ -55,7 +55,7 @@ body {
 }
 
 .levelupButton {
-    margin-top: 10rem;
+    margin-top: 0rem;
     display: inline-block;
     padding: 1rem 2.8rem;
     border-radius: 4rem;
@@ -74,6 +74,57 @@ body {
     color: var(--bg-color);
 }
 
+.createKittyButton{
+    margin-top: 0rem;
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    border-radius: 4rem;
+    box-shadow: 0 0 1rem var(--main-color);
+    color: var(--main-color);
+    transition: .3s ease;
+    font-size: 1rem;
+    letter-spacing: .1rem;
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+}
+
+.createKittyButton:hover {
+    background: var(--main-color);
+    color: var(--bg-color);
+}
+
+.showKitty{
+    margin-top: 0rem;
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    border-radius: 4rem;
+    box-shadow: 0 0 1rem var(--main-color);
+    color: var(--main-color);
+    transition: .3s ease;
+    font-size: 1rem;
+    letter-spacing: .1rem;
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+}
+.showKitty:hover {
+    background: var(--main-color);
+    color: var(--bg-color);
+}
+
+.kitty_buttons button{
+    margin-top: 5px;
+    margin-right: 15px;
+}
+
+.kittyheading{
+    margin-top: 30px;
+    color: var(--main-color);
+    font-size: 2rem;
+    letter-spacing: .1rem;
+    font-weight: 600;
+}
 .back-video {
     position: absolute;
     right: 0;

@@ -26,24 +26,29 @@
 <body>
   <div id="txStatus"></div>
   <div id="zombies"></div>
+  <section>
+
   <div class="buttons">
     <button class="showZombieButton">Show Zombies</button>
     <button class="createzombieButton">Create Zombie</button>
     <button class="levelupButton">Level Up</button>
   </div>
+
   <video autoplay loop muted plays-inline class="back-video">
     <source src="zombie_created.mp4" type="video/mp4">
   </video>
-
-  <div id="Kittes"></div>
-  <div id="createKitty">
-
-    <h2>Create a New Kitty</h2>
+  <p class="kittyheading">Create a New Kitty</p>
     <div id="kittyStatus"></div>
+  <div class ="kitty_buttons">
     <button class="createKittyButton">Create Kitty</button>
+    <button class="showKitty">show Kitties</button>
   </div>
-
-  <button class="showKitty">show Kitties</button>
+    </section>
+  <section>
+    <video autoplay loop muted plays-inline class="back-video">
+      <source src="zombie_created.mp4" type="video/mp4">
+    </video>
+  </section>
 
   <script>
 
@@ -59,9 +64,9 @@
 
     function startApp() {
 
-      //ZombieOwnership contratc address
-      var cryptoZombiesAddress = "0xE4dCd9197EF85d09d2aD0101dbd7f89EaC5Cc2c3";
-      var crptoKittyAddress = "0x8188193A0D040a9495bfe4c3634cbfFf2296AF52";
+      //ZombieOwnership contrat address
+      var cryptoZombiesAddress = "0x02e3CA2B140671f4c612f284314C45B23906Ca31";
+      var crptoKittyAddress = "0xe606384c5Cc0f9Eb8ABE8c3b44f32b740534544a";
 
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
       kittyZombies = new web3.eth.Contract(cryptoKittyABI, crptoKittyAddress);
@@ -86,6 +91,7 @@
     }
 
     function displayZombies(ids) {
+      console.log(cryptoZombies.method);
       $("#zombies").empty();
       for (id of ids) {
 
@@ -128,6 +134,7 @@
               </ul>
             </div>`);
           });
+
       }
 
     }
